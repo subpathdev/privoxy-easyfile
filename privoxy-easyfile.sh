@@ -14,6 +14,7 @@
 # dependencies
 DEPENDS=('sed' 'grep' 'bash' 'wget')
 
+# which parameter you can insert
 function usage() {
 	echo "{TMPNAME}is a script to converte AdlockPlus lists into Privoxy-Actionfile"
 	echo ""
@@ -26,7 +27,7 @@ function usage() {
 	echo " 	-r:		Remove all lists build by this scrippt."
 }
 
-[${UID} -ne 0 ] && echo -e "Root privileges needed. Exit. \n\n" && usage && exit 1
+[${UID} == 0 ] && echo -e "Root privileges needed. Exit. \n\n" && usage && exit 1
 
 for deb in ${DEPENDS[@]} do
 	if ! type -p ${dep} > /dev/null then
