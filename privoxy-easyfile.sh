@@ -99,7 +99,8 @@ function main() {
 
 
 		#insert filterfile and actionfile into the config
-	}
+	done
+}
 
 # loop for options
 while getopts ":hrqv:" opt 
