@@ -80,11 +80,13 @@ function main() {
 
 		#creating actionfile and fill it
 		touch ${dictory}/${url//\//#}.action
-		echo -e "{+block{blacklisted at ${url}}" > ${dictory}/${url//\//#}
-
+		echo -e "{+block{blacklisted at ${url}}" > ${dictory}/${url//\//#}.action
+		sed '1d; /^!.*/d' > ${dictory}/${url//\//#}.action
 
 		#creating filterfile and fill it
 		touch ${dictory}/${url//\//#}.filter
+		echo -e "{+block{blacklisted at ${url}}" > ${dictory}/${url//\//#}.filter
+
 
 		#insert filterfile and actionfile into the config
 
