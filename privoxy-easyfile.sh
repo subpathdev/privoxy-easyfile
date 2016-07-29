@@ -28,7 +28,7 @@ function usage() {
 	echo "{TMPNAME}is a script to converte AdlockPlus lists into Privoxy-Actionfile"
 	echo ""
 	echo "Options:"
-	echo "	-h: 	Shwo this help."
+	echo "	-h: 	Show this help."
 	echo " 	-q:		Don't give any output"
 	echo "	-v 1:	Enable verbosity 1. Show a little bit more output"
 	echo " 	-v 2:	Enable verbosity 2. Show a lot more output"
@@ -44,6 +44,12 @@ do
 		echo "The command ${dep} can't be found. Please install the package providing ${dep} and run $0 again. Exit" >&2
 		exit 1
 	fi	
+done
+
+for url in ${URLS[@]}
+do
+	debug "Downloading ${url} ...\n" 0
+	wget -t 3 ${url} > /tmp/${url//\//#}
 done
 
 # loop for options
