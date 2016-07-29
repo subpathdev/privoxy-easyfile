@@ -78,12 +78,19 @@ function main() {
 			echo "This file isn't an Adblock file"
 		fi
 
+		# this want be done for the action and the filter file
+		# deleting first line
+		sed -i '1d' ${file} 
+		# insert {-block{whitelisted}} after each line, which include whitelist
+		sed -i '/whitelist/a {-block{whitelisted}}' ${file}
+
 		#creating actionfile and fill it
 		touch ${dictory}/${url//\//#}.action
-		sed -i '1d' ${file}
-		sed -i '/whitelist/a {-block{whitelisted}}' ${file}
+		# insert {+block{blocked}} after each line, which include block
 		sed '/block/a {+block{blocked}}' ${file} > ${dictory}/${url//\//#}
+		# deleting all comments
 		sed -i '/^!.*/d' ${dictory}/${url//\//#}
+		# deleting all lines, which startetd with a #
 		sed -i '/^#.*/d' ${dictory}/${url//\//#}
 
 		#creating filterfile and fill it
