@@ -27,7 +27,7 @@ function usage() {
 	echo " 	-r:		Remove all lists build by this scrippt."
 }
 
-[${UID} == 0 ] && echo -e "Root privileges needed. Exit. \n\n" && usage && exit 1
+if $UID != 0 then echo -e "Root privileges needed. Exit. \n\n" && usage && exit 1
 
 for deb in ${DEPENDS[@]} do
 	if ! type -p ${dep} > /dev/null then
@@ -36,7 +36,7 @@ for deb in ${DEPENDS[@]} do
 	if
 done
 
-# loop for optioins
+# loop for options
 while getopts ":hrqv:" opt do
 	case 
 		"${opt}" in "v")
