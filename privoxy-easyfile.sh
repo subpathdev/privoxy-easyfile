@@ -81,7 +81,7 @@ function main() {
 		#creating actionfile and fill it
 		touch ${dictory}/${url//\//#}.action
 		echo -e "{+block{blacklisted at ${url}}" > ${dictory}/${url//\//#}.action
-		sed '1d; /^!.*/d' > ${dictory}/${url//\//#}.action
+		sed '1d; /^!.*/d; s/\(*[A-Za-z0-9_=]*\).*/\1*/' > ${dictory}/${url//\//#}.action
 
 		#creating filterfile and fill it
 		touch ${dictory}/${url//\//#}.filter
