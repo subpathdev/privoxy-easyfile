@@ -80,15 +80,19 @@ function main() {
 
 		#creating actionfile and fill it
 		touch ${dictory}/${url//\//#}.action
-		echo -e "{+block{blacklisted at ${url}}" > ${dictory}/${url//\//#}.action
-		sed '1d; /^!.*/d; s/\(*[A-Za-z0-9_=]*\).*/\1*/' > ${dictory}/${url//\//#}.action
+		sed -i '1d' ${file}
+		sed -i '/whitelist/a {-block{whitelisted}}' ${file}
+		sed '/block/a {+block{blocked}}' ${file} > ${dictory}/${url//\//#}
+		sed -i '/^!.*/d' ${dictory}/${url//\//#}
+		sed -i '/^#.*/d' ${dictory}/${url//\//#}
 
 		#creating filterfile and fill it
 		touch ${dictory}/${url//\//#}.filter
-		echo -e "{+block{blacklisted at ${url}}" > ${dictory}/${url//\//#}.filter
+		echo -e "{+block{blacklisted at ${url}}}" > ${dictory}/${url//\//#}.filter
 
 
 		#insert filterfile and actionfile into the config
+	}
 
 # loop for options
 while getopts ":hrqv:" opt 
