@@ -11,6 +11,10 @@
 #
 #############################
 
+# lists of the using URLS
+# they are used by AdBlockPlus
+URLS=(\"https://easylist-downloads.adblockplus.org/easylistgermany.txt\", \"https://easylist-downloads.adblockplus.mozdev.org/easylist/easylist.txt\")
+
 # dependencies
 DEPENDS=('sed' 'grep' 'bash' 'wget')
 
