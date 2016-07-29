@@ -2,7 +2,7 @@
 # Privoxy-Easyfile
 # Downloads Easyfile and EasyfileGermany
 # writen by Jan Unterbrink
-# E-Mail: code@subpath.de
+# E-Mail: privoxy-easyfile@subpath.de
 ###########
 #
 # Sumary:
