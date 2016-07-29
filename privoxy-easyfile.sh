@@ -46,16 +46,37 @@ do
 	fi	
 done
 
-for url in ${URLS[@]}
-do
-	debug "Downloading ${url} ...\n" 0
-	wget -t 3 ${url} > /tmp/${url//\//#}
-done
+# downloading the files and saving in /tmp/
+function download() {
+	for url in ${URLS[@]}
+	do
+		debug "Downloading ${url} ...\n" 0
+		wget -t 3 ${url} > /tmp/${url//\//#}
+	done
+	debug "done download" 0
+}
 
 # function debug()
 function debug() {
 	[ ${DBG} -ge ${2} ] && echo -e "${1}"
 }
+
+# main funcation
+function main() {
+	for url in ${URLS[@]}
+	do
+		debug "create variables: file and dictory" 2
+		file=/tmp/${url//\//#}
+		dictory=/etc/privoxy
+
+		debug "Processing at ${url} .../n" 0
+		
+		# downloading
+		download
+
+		if [ grep -e Adblock ${file} == ""]; then
+			echo "This file isn't an Adblock file"
+		fi
 
 # loop for options
 while getopts ":hrqv:" opt 
@@ -87,3 +108,5 @@ do
 		;;
 	esac
 done
+
+exit 0
