@@ -3,7 +3,12 @@ Privoxy-Easyfile
 
 This Projekt download a the easyfile from the websites https://easylist-downloads.adblockplus.org/easylistgermany.txt and http://adblockplus.mozdev.org/easylist/easylist.txt
 
-This should be a new version of the file of Andrwe Lord Weber.
+Using
+-----------------------------
+you have to change your configuration file and insert 2 new actionfiles after user.actionfile.
+The actionfiles named:
+- easy.actionfile
+- germany.actionfile
 
 Similar Software
 -----------------------------
