@@ -52,6 +52,11 @@ do
 	wget -t 3 ${url} > /tmp/${url//\//#}
 done
 
+# function debug()
+function debug() {
+	[ ${DBG} -ge ${2} ] && echo -e "${1}"
+}
+
 # loop for options
 while getopts ":hrqv:" opt 
 do
