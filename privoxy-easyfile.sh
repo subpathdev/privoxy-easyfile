@@ -78,6 +78,16 @@ function main() {
 			echo "This file isn't an Adblock file"
 		fi
 
+		#creating actionfile and fill it
+		touch ${dictory}/${url//\//#}.action
+		echo -e "{+block{blacklisted at ${url}}" > ${dictory}/${url//\//#}
+
+
+		#creating filterfile and fill it
+		touch ${dictory}/${url//\//#}.filter
+
+		#insert filterfile and actionfile into the config
+
 # loop for options
 while getopts ":hrqv:" opt 
 do
