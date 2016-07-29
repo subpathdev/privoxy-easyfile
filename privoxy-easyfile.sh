@@ -14,6 +14,11 @@
 # dependencies
 DEPENDS=('sed' 'grep' 'bash' 'wget')
 
+#function for exists
+command_exists () {
+	type "$1" $> /dev/null;
+}
+
 # which parameter you can insert
 function usage() {
 	echo "{TMPNAME}is a script to converte AdlockPlus lists into Privoxy-Actionfile"
@@ -29,17 +34,19 @@ function usage() {
 
 if $UID != 0 then echo -e "Root privileges needed. Exit. \n\n" && usage && exit 1
 
-for deb in ${DEPENDS[@]} do
-	if ! type -p ${dep} > /dev/null then
-		echo "The command ${dep} can't be found. Please install the package providing ${dep} and run $0 again. Exit" > &2
+for deb in ${DEPENDS[@]} 
+do
+	if ! command_exists ${dep} ; then
+		echo "The command ${dep} can't be found. Please install the package providing ${dep} and run $0 again. Exit" >&2
 		exit 1
-	if
+	fi	
 done
 
 # loop for options
-while getopts ":hrqv:" opt do
-	case 
-		"${opt}" in "v")
+while getopts ":hrqv:" opt 
+do
+	case "${opt}" in 
+		"v")
 			DBG="${OPTARG}"
 			VERBOSE="-v" 
 			;; 
