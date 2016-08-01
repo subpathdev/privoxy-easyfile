@@ -23,19 +23,6 @@ command_exists () {
 	type "$1" $> /dev/null;
 }
 
-# which parameter you can insert
-function usage() {
-	echo "{TMPNAME}is a script to converte AdlockPlus lists into Privoxy-Actionfile"
-	echo ""
-	echo "Options:"
-	echo "	-h: 	Show this help."
-	echo " 	-q:		Don't give any output"
-	echo "	-v 1:	Enable verbosity 1. Show a little bit more output"
-	echo " 	-v 2:	Enable verbosity 2. Show a lot more output"
-	echo " 	-v 3:	Enable verbosity 3. Show all possible output"
-	echo " 	-r:		Remove all lists build by this scrippt."
-}
-
 if $UID != 0 then echo -e "Root privileges needed. Exit. \n\n" && usage && exit 1
 
 for deb in ${DEPENDS[@]} 
@@ -68,6 +55,8 @@ function main() {
 		debug "create variables: file and dictory" 2
 		file=/tmp/${url//\//#}
 		dictory=/etc/privoxy
+		action=${url//\//#}.action
+		filter=${dictory}/${url//\//#}.filter
 
 		debug "Processing at ${url} .../n" 0
 		
@@ -81,56 +70,54 @@ function main() {
 		# this want be done for the action and the filter file
 		# deleting first line
 		sed -i '1d' ${file} 
+		
+		# creating actionfile and fill it
+		# insert {+block{blocked}} after each line, which include block
+		sed '/block/a {+block{blocked}}' ${file} > ${dictory}/${action}
 		# insert {-block{whitelisted}} after each line, which include whitelist
 		sed -i '/whitelist/a {-block{whitelisted}}' ${file}
-
-		#creating actionfile and fill it
-		touch ${dictory}/${url//\//#}.action
-		# insert {+block{blocked}} after each line, which include block
-		sed '/block/a {+block{blocked}}' ${file} > ${dictory}/${url//\//#}
 		# deleting all comments
-		sed -i '/^!.*/d' ${dictory}/${url//\//#}
+		sed -i '/^!.*/d' ${dictory}/${action}
 		# deleting all lines, which startetd with a #
-		sed -i '/^#.*/d' ${dictory}/${url//\//#}
+		sed -i '/^#.*/d' ${dictory}/${action}
 
-		#creating filterfile and fill it
-		touch ${dictory}/${url//\//#}.filter
-		echo -e "{+block{blacklisted at ${url}}}" > ${dictory}/${url//\//#}.filter
+		# creating filterfile and fill it
+		# deleting all lines, which beginnen with a &
+		sed '/^&.*/d' ${file} > $dictory}/${filter}
+		# deleting all lines, which beginning with a +
+		sed -i '/^+.*/d' ${filter}
+		# deleting all lines, which beginning with a -
+		sed -i '/^-.*/d' ${filter}
+		# deleting all lines, which beginning with a /
+		sed -i '/^\/.*/d' ${filter}
+		# deleting all lines, which beginning with a .
+		sed -i '/^\..*/d' ${filter}
+		# deleting all lines, which beginning with a :
+		sed -i '/^:.*/d' ${filter}
+		# deleting all lines, which beginning with a ;
+		sed -i '/^;.*/d' ${filter}
+		# deleting all lines, which beginning with a =
+		sed -i '/^=.*/d' ${filter}
+		# deleting all lines, which beginning with a ;
+		sed -i '/^;.*/d' ${filter}
+		# deleting all lines, which beginning with a ?
+		sed -i '/^?.*/d' ${filter}
+		# deleting all lines, which beginning with a ^
+		sed -i '/^\^.*/d' ${filter}
+		# deleting all lines, which beginning with a _
+		sed -i '/^_.*/d' ${filter}
+		# deleting all lines, which beginning with a |
+		sed -i '/^|.*/d' ${filter}
+		# deleting all lines, which beginning with a ,
+		sed -i '/^,.*/d' ${filter}
+		# deleting all lines, which beginning with a number
+		sed -i '/^[0-9].*/d' ${filter}
+		# deleting all lines, wich beginning with a letter
+		sed -i '/^[a-zA-Z].*/d' ${filter}
+		# deleting all lines, wich beginning with a @
+		sed -i '/^@.*/d' ${filter}
 
 
 		#insert filterfile and actionfile into the config
 	done
 }
-
-# loop for options
-while getopts ":hrqv:" opt 
-do
-	case "${opt}" in 
-		"v")
-			DBG="${OPTARG}"
-			VERBOSE="-v" 
-			;; 
-			"q")
-			DBG=-1
-		;;
-		"r")
-			read -p "Do you really want to remove all build lists?(y/N) " choice
-			[ "${choice}" != "y" ] && exit 0
-			rm /etc/privoxy/easy.action
-			rm /etc/privoxy/german.action
-			rm /etc/privoxy/easy.filter
-			rm /etc/privoxy/german.filter
-			exit 1
-		;;
-		":")
-			echo "${TMPNAME}: -${OPTARG} requires an argument" >&2
-			exit 1
-		;;
-			"h"|*)
-			usage
-			exit 0
-		;;
-	esac
-done
-
-exit 0
