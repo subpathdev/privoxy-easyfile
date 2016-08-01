@@ -13,10 +13,10 @@
 
 # lists of the using URLS
 # they are used by AdBlockPlus
-URLS=(\"https://easylist-downloads.adblockplus.org/easylistgermany.txt\" \"https://easylist-downloads.adblockplus.mozdev.org/easylist/easylist.txt\")
+URLS=(\"easylist.to/easylist/easylist.txt\" \"easylist.to/easylistgermany/easylistgermany.txt\")
 
 # dependencies
-DEPENDS=('sed' 'grep' 'bash' 'wget')
+DEPENDS=('sed' 'grep' 'bash' 'curl')
 
 #function for exists
 command_exists () {
@@ -38,13 +38,14 @@ download () {
 	for url in ${URLS[@]}
 	do
 		debug "Downloading ${url} ...\n" 0
-		wget -t 3 ${url} > /tmp/${url//\//#}
+		curl -k  ${url} > /tmp/${url//\//#}
 	done
 	debug "done download" 0
 }
 
 # function debug()
 debug () {
+	echo ${1}
 }
 
 # main funcation
@@ -59,10 +60,7 @@ main () {
 
 		debug "Processing at ${url} .../n" 0
 		
-		# downloading
-		download
-
-		if [ grep -e Adblock ${file} == ""]; then
+		if [ grep -e Adblock ${file}]; then
 			echo "This file isn't an Adblock file"
 		fi
 
