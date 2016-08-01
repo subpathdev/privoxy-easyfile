@@ -129,6 +129,8 @@ main () {
 		debug "finished filterfile /n" 0
 
 		#insert filterfile and actionfile into the config
+		sed -i '/actionsfile user.action/a actionfile shit' /etc/privoxy/config
+		sed -i '/actionfile shit/c \\${filter}' /etc/privoxy/config
 	done
 }
 
