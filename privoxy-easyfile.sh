@@ -33,6 +33,8 @@ do
 	fi	
 done
 
+main()
+
 # downloading the files and saving in /tmp/
 function download() {
 	for url in ${URLS[@]}
