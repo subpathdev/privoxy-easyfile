@@ -118,9 +118,12 @@ main () {
 		sed -i '/^@.*/d' ${filter}
 		# deleteing all komments
 		sed -i '/^!.*/d' ${filter}
-
-		#TODO insert schemata for insert
-
+		# substitude ## with ##
+		sed -i 's/^###/##/g' ${filter}
+		# substitude ## with s@<(a-zA-Z0-9]+\s+.*id=
+		sed -i 's/^##/s@<(a-zA-Z0-9]+\s+.*id=/g' ${filter}
+		# insert at end of line
+		sed -i 's/$/.*>.*<\/\\1>@@g/g' ${filter}
 		# insert first line {+filter{}}
 		sed -i '1 i\{+filter{easylist}}' ${filter}
 		debug "finished filterfile /n" 0
