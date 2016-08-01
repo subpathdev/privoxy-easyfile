@@ -13,17 +13,17 @@
 
 # lists of the using URLS
 # they are used by AdBlockPlus
-URLS=(\"https://easylist-downloads.adblockplus.org/easylistgermany.txt\", \"https://easylist-downloads.adblockplus.mozdev.org/easylist/easylist.txt\")
+URLS=(\"https://easylist-downloads.adblockplus.org/easylistgermany.txt\" \"https://easylist-downloads.adblockplus.mozdev.org/easylist/easylist.txt\")
 
 # dependencies
 DEPENDS=('sed' 'grep' 'bash' 'wget')
 
 #function for exists
 command_exists () {
-	type "$1" $> /dev/null;
+	type ${1} > /dev/null;
 }
 
-if $UID != 0 then echo -e "Root privileges needed. Exit. \n\n" && usage && exit 1
+# if $UID != 0 then echo -e "Root privileges needed. Exit. \n\n" && usage && exit 1
 
 for deb in ${DEPENDS[@]} 
 do
@@ -33,10 +33,12 @@ do
 	fi	
 done
 
-main()
+main
+
+exit 0
 
 # downloading the files and saving in /tmp/
-function download() {
+download () {
 	for url in ${URLS[@]}
 	do
 		debug "Downloading ${url} ...\n" 0
@@ -46,12 +48,12 @@ function download() {
 }
 
 # function debug()
-function debug() {
+debug () {
 	[ ${DBG} -ge ${2} ] && echo -e "${1}"
 }
 
 # main funcation
-function main() {
+main () {
 	for url in ${URLS[@]}
 	do
 		debug "create variables: file and dictory" 2
@@ -85,7 +87,7 @@ function main() {
 
 		# creating filterfile and fill it
 		# deleting all lines, which beginnen with a &
-		sed '/^&.*/d' ${file} > $dictory}/${filter}
+		sed '/^&.*/d' ${file} > ${filter}
 		# deleting all lines, which beginning with a +
 		sed -i '/^+.*/d' ${filter}
 		# deleting all lines, which beginning with a -
@@ -118,7 +120,6 @@ function main() {
 		sed -i '/^[a-zA-Z].*/d' ${filter}
 		# deleting all lines, wich beginning with a @
 		sed -i '/^@.*/d' ${filter}
-
 
 		#insert filterfile and actionfile into the config
 	done
