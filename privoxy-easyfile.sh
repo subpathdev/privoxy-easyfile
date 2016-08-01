@@ -13,7 +13,7 @@
 
 # lists of the using URLS
 # they are used by AdBlockPlus
-URLS=(\"easylist.to/easylist/easylist.txt\" \"easylist.to/easylistgermany/easylistgermany.txt\")
+URLS=(\"https://easylist.to/easylist/easylist.txt\" \"https://easylist.to/easylistgermany/easylistgermany.txt\")
 
 # dependencies
 DEPENDS=('sed' 'grep' 'bash' 'curl')
@@ -38,7 +38,7 @@ download () {
 	for url in ${URLS[@]}
 	do
 		debug "Downloading ${url} ...\n" 0
-		curl -k  ${url} > /tmp/${url//\//#}
+		curl -k  ${url//\"/} > /tmp/${url//\//#}
 	done
 	debug "done download" 0
 }
@@ -50,6 +50,7 @@ debug () {
 
 # main funcation
 main () {
+	download
 	for url in ${URLS[@]}
 	do
 		debug "create variables: file and dictory" 2
@@ -60,9 +61,9 @@ main () {
 
 		debug "Processing at ${url} .../n" 0
 		
-		if [ grep -e Adblock ${file}]; then
-			echo "This file isn't an Adblock file"
-		fi
+#		if [ grep -e Adblock ${file} ]; then
+#			echo "This file isn't an Adblock file"
+#		fi
 
 		# this want be done for the action and the filter file
 		# deleting first line
@@ -113,6 +114,10 @@ main () {
 		sed -i '/^[a-zA-Z].*/d' ${filter}
 		# deleting all lines, wich beginning with a @
 		sed -i '/^@.*/d' ${filter}
+		# deleteing all komments
+		sed -i '/^!.*/d' ${filter}
+		# insert first line {+filter{}}
+		sed -i '1 i\{+filter{easylist}}' ${filter}
 
 		#insert filterfile and actionfile into the config
 	done
