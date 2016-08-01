@@ -33,10 +33,6 @@ do
 	fi	
 done
 
-main
-
-exit 0
-
 # downloading the files and saving in /tmp/
 download () {
 	for url in ${URLS[@]}
@@ -49,7 +45,6 @@ download () {
 
 # function debug()
 debug () {
-	[ ${DBG} -ge ${2} ] && echo -e "${1}"
 }
 
 # main funcation
@@ -124,3 +119,7 @@ main () {
 		#insert filterfile and actionfile into the config
 	done
 }
+
+main
+
+exit 1 
