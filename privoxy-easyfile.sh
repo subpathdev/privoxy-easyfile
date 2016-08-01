@@ -78,6 +78,8 @@ main () {
 		sed -i '/^!.*/d' ${dictory}/${action}
 		# deleting all lines, which startetd with a #
 		sed -i '/^#.*/d' ${dictory}/${action}
+		debug "Finished action file /n" 0
+
 
 		# creating filterfile and fill it
 		# deleting all lines, which beginnen with a &
@@ -116,8 +118,12 @@ main () {
 		sed -i '/^@.*/d' ${filter}
 		# deleteing all komments
 		sed -i '/^!.*/d' ${filter}
+
+		#TODO insert schemata for insert
+
 		# insert first line {+filter{}}
 		sed -i '1 i\{+filter{easylist}}' ${filter}
+		debug "finished filterfile /n" 0
 
 		#insert filterfile and actionfile into the config
 	done
