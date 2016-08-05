@@ -13,7 +13,7 @@
 
 # lists of the using URLS
 # they are used by AdBlockPlus
-URLS=(\"https://easylist.to/easylist/easylist.txt\" \"https://easylist.to/easylistgermany/easylistgermany.txt\")
+URLS=(https://easylist.to/easylist/easylist.txt https://easylist.to/easylistgermany/easylistgermany.txt)
 
 # dependencies
 DEPENDS=('sed' 'grep' 'bash' 'curl')
@@ -38,7 +38,7 @@ download () {
 	for url in ${URLS[@]}
 	do
 		debug "Downloading ${url} ...\n" 0
-		curl -k  ${url//\"/} > /tmp/${url//\//#}
+		curl -k  ${url//\"/} > /tmp/${url//\//.}
 	done
 	debug "done download" 0
 }
@@ -54,10 +54,10 @@ main () {
 	for url in ${URLS[@]}
 	do
 		debug "create variables: file and dictory" 2
-		file=/tmp/${url//\//#}
+		file=/tmp/${url//\//.}
 		dictory=/etc/privoxy
-		action=${url//\//#}.action
-		filter=${dictory}/${url//\//#}.filter
+		action=${url//\//.}.action
+		filter=${dictory}/${url//\//.}.filter
 
 		debug "Processing at ${url} .../n" 0
 		
@@ -76,6 +76,12 @@ main () {
 		sed -i '/whitelist/a {-block{whitelisted}}' ${file}
 		# deleting all comments
 		sed -i '/^!.*/d' ${dictory}/${action}
+		# deleting lines, which have a |
+		sed -i '/|*/d' ${dictory}/${action}
+		# deleting lines, which have a =*
+		sed -i '/=*/d' ${dictory}/${action}
+		# deleting lines, which have a -$
+		sed -i '/=$/d' ${dictory}/${action}
 		# deleting all lines, which startetd with a #
 		sed -i '/^#.*/d' ${dictory}/${action}
 		debug "Finished action file /n" 0
@@ -128,13 +134,13 @@ main () {
 		sed -i '1 i\{+filter{easylist}}' ${filter}
 		debug "finished filterfile /n" 0
 
-		sed -i "/actionsfile \\${url//\//#}.action/d" /etc/privoxy/config
-		sed -i "/filterfile \\${url//\//#}.filter/d" /etc/privoxy/config
+		sed -i "/actionsfile \\${url//\//.}.action/d" /etc/privoxy/config
+		sed -i "/filterfile \\${url//\//.}.filter/d" /etc/privoxy/config
 
 		#insert filterfile and actionfile into the config
 		debug "creating entry in the privoxy config" 2
-		sed -i "/actionsfile user.action/a actionsfile \\${url//\//#}.action" /etc/privoxy/config
-		sed -i "/filterfile user.filter/a filterfile \\${url//\//#}.filter" /etc/privoxy/config
+		sed -i "/actionsfile user.action/a actionsfile \\${url//\//.}.action" /etc/privoxy/config
+		sed -i "/filterfile user.filter/a filterfile \\${url//\//.}.filter" /etc/privoxy/config
 	done
 }
 
