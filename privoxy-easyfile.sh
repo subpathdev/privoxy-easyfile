@@ -128,9 +128,11 @@ main () {
 		sed -i '1 i\{+filter{easylist}}' ${filter}
 		debug "finished filterfile /n" 0
 
+		echo ${filter}
+
 		#insert filterfile and actionfile into the config
-		sed -i '/actionsfile user.action/a actionfile shit' /etc/privoxy/config
-		sed -i '/actionfile shit/c \\${filter}' /etc/privoxy/config
+		sed -i "/actionsfile user.action/a actionfile \\$directory/\\$action" /etc/privoxy/config
+		sed -i "/filterfile user.filter/a filterfile \\$filter" /etc/privoxy/config
 	done
 }
 
