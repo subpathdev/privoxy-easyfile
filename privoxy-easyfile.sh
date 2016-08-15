@@ -73,17 +73,15 @@ main () {
 		# insert {+block{blocked}} after each line, which include block
 		sed '/block/a {+block{blocked}}' ${file} > ${dictory}/${action}
 		# insert {-block{whitelisted}} after each line, which include whitelist
-		sed -i '/whitelist/a {-block{whitelisted}}' ${file}
+		sed -i '/whitelist/a {-block{whitelisted}}' ${dictory}/${action}
 		# deleting all comments
 		sed -i '/^!.*/d' ${dictory}/${action}
-		# deleting lines, which have a |
-		sed -i '/|*/d' ${dictory}/${action}
-		# deleting lines, which have a =*
-		sed -i '/=*/d' ${dictory}/${action}
 		# deleting lines, which have a -$
 		sed -i '/=$/d' ${dictory}/${action}
 		# deleting all lines, which startetd with a #
 		sed -i '/^#.*/d' ${dictory}/${action}
+		# deleting lines with ?*
+		sed -i '/?*/d' ${dictory}/${action}
 		debug "Finished action file /n" 0
 
 
