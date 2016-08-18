@@ -13,6 +13,8 @@ you have to change your configuration file and insert 2 new actionfiles after us
 The actionfiles named:
 - easy.actionfile
 - germany.actionfile
+- easy.filter
+- germany.filter
 
 Similar Software
 -----------------------------
